@@ -13,11 +13,17 @@ router.post('/send-verify-code', async (req: express.Request, res: express.Respo
   if (verifyServiceSID == '') {
     return res.status(500).send({error: 'VERIFY API NOT SET. MISSING VARIABLES.'});
   }
-  let verifyResponse = await verifyClient.verify.services(verifyServiceSID).verifications.create({ to: req.body.phone, channel: 'sms' });
-  console.log('started verifying number ' + req.body.phone, verifyResponse);
-  return res.status(200).send({
-    success: verifyResponse.status == 'pending' ? true : false
-  });
+  try {
+    let verifyResponse = await verifyClient.verify.services(verifyServiceSID).verifications.create({ to: req.body.phone, channel: 'sms' });
+    console.log('started verifying number ' + req.body.phone, verifyResponse);
+    return res.status(200).send({
+      success: verifyResponse.status == 'pending' ? true : false
+    });
+  } catch (err) {
+    console.log('got error in /send-verify-code', err);
+    return res.status(500).send({ err: err });
+  }
+  
 });
 
 router.post('/verify-number', async (req: express.Request, res: express.Response) => {
