@@ -30,11 +30,16 @@ router.post('/verify-number', async (req: express.Request, res: express.Response
   if (verifyServiceSID == '') {
     return res.status(500).send({error: 'VERIFY API NOT SET. MISSING VARIABLES.'});
   }
-  let verifyResponse = await verifyClient.verify.services(verifyServiceSID).verificationChecks.create({ to: req.body.phone, code: req.body.code });
-  console.log(`started verifying number "${req.body.phone}" with code "${req.body.code}"`, verifyResponse);
-  return res.status(200).send({
-    success: verifyResponse.status == 'approved' ? true : false
-  });
+  try {
+    let verifyResponse = await verifyClient.verify.services(verifyServiceSID).verificationChecks.create({ to: req.body.phone, code: req.body.code });
+    console.log(`started verifying number "${req.body.phone}" with code "${req.body.code}"`, verifyResponse);
+    return res.status(200).send({
+      success: verifyResponse.status == 'approved' ? true : false
+    });
+  } catch (err) {
+    console.log('got error in /verify-number', err);
+    return res.status(500).send({ err: err });
+  }
 });
 
 export = router;
