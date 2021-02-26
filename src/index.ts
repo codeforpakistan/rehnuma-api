@@ -1,3 +1,4 @@
+require('dotenv').config();
 import express from 'express';
 import bodyParser =  require('body-parser');
 var cors = require('cors');
@@ -13,12 +14,7 @@ app.get('/', (req, res) => {
 });
 
 app.post('/get-license', (req, res) => {
-  console.log('reqbody', req.body);
-  let form = new FormData();
-  form.append( 'cnic', req.body.cnic );
-  axios.create({
-    headers: form.getHeaders()
-  }).post('http://103.240.220.76/kptraffic//license_verification/get_license_data', form).then((response: any) => {
+  axios.create().get(`${process.env.License_API}?key=${process.env.License_API_KEY}&search=${req.body.cnic}`).then((response: any) => {
     res.status(200).json(response.data);
   }).catch((error: any) => {
     res.status(500).json(error);
