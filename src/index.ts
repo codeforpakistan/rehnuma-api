@@ -22,6 +22,55 @@ app.post('/get-license', (req, res) => {
   });
 });
 
+app.get('/challan-info/:number', (req, res) => {
+  try {
+    axios.create().get(`${process.env.RABTA_API}/getchallandetail?ChallanNo=${req.params.number}`).then((response: any) => {
+      if (response.data.name === 'Error') {
+        return res.status(500).json(response.data);
+      }
+      return res.status(200).json(response.data);
+    }).catch((error: any) => {
+      res.status(500).json(error);
+      console.error('erorr', error.message);
+    });
+  } catch(err) {
+    console.error('err', err);
+    res.status(500).send(err);
+  }
+});
+
+app.get('/challan-info/:number', (req, res) => {
+  try {
+    axios.create().get(`${process.env.RABTA_API}/getchallandetail?ChallanNo=${req.params.number}`).then((response: any) => {
+      if (response.data.name === 'Error') {
+        return res.status(500).json(response.data);
+      }
+      return res.status(200).json(response.data);
+    }).catch((error: any) => {
+      res.status(500).json(error);
+      console.error('erorr', error.message);
+    });
+  } catch(err) {
+    console.error('err', err);
+    res.status(500).send(err);
+  }
+});
+
+app.get('/live-traffic-updates/:roadName', (req, res) => {
+  try {
+    console.log('roadName', req.params.roadName);
+    axios.create().get(`${process.env.LIVE_TRAFFIC_UPDATE_API}/live_updates/get_updates?flag=${req.params.roadName}`).then((response: any) => {
+      return res.status(200).json(response.data);
+    }).catch((error: any) => {
+      res.status(500).json(error);
+      console.error('erorr', error.message);
+    });
+  } catch(err) {
+    console.error('err', err);
+    res.status(500).send(err);
+  }
+});
+
 const port = 3000;
 app.listen(port, () => {
   console.info(`listening on port ${port}`);
