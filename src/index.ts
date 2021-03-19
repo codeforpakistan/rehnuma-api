@@ -13,8 +13,8 @@ app.get('/', (req, res) => {
   res.status(200).send('hey');
 });
 
-app.post('/get-license', (req, res) => {
-  axios.create().get(`${process.env.License_API}?key=${process.env.License_API_KEY}&search=${req.body.cnic}`).then((response: any) => {
+app.get('/get-license/:cnic', (req, res) => {
+  axios.create().get(`${process.env.License_API}?key=${process.env.License_API_KEY}&search=${req.params.cnic}`).then((response: any) => {
     res.status(200).json(response.data);
   }).catch((error: any) => {
     res.status(500).json(error);
