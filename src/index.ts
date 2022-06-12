@@ -10,7 +10,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 app.get('/', (req, res) => {
-  res.status(200).send('hey');
+  res.status(200).send('api active');
 });
 
 app.get('/get-license/:cnic', (req, res) => {
@@ -48,6 +48,17 @@ app.get('/live-traffic-updates/:roadName', (req, res) => {
       res.status(500).json(error);
       console.error('erorr', error.message);
     });
+  } catch(err) {
+    console.error('err', err);
+    res.status(500).send(err);
+  }
+});
+
+app.post('/renew-lisence', (req, res) => {
+  try {
+    // make the call to govt api
+    // get response -- maybe transform the response to your liking?
+    // return
   } catch(err) {
     console.error('err', err);
     res.status(500).send(err);
